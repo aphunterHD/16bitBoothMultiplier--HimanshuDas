@@ -1,0 +1,44 @@
+//Implementation of 8 x 8 bits Multiplier using Booth Algorithm
+
+`timescale 1ns / 1ps
+
+module bm(reset,a,b,out);
+
+input [7:0] a,b;
+input reset;
+output reg [15:0] out;
+
+reg [7:0] acc,mul;
+reg q_1;
+reg signed [16:0] t;
+integer i;
+wire [7:0] ac;
+
+assign ac=~a+1;
+
+always@(*)
+begin
+
+if(reset) begin acc=0;q_1=0;mul=b;t={acc,mul,q_1}; end
+
+else
+begin
+
+for(i=0;i<=7;i=i+1)
+begin
+
+case({t[1],t[0]})
+2'b00: begin t=t>>>1; end
+2'b01: begin t=t+{a,8'b00,1'b0}; t=t>>>1; end
+2'b10: begin t=t+{ac,8'b00,1'b0}; t=t>>>1; end
+2'b11: begin t=t>>>1; end
+endcase
+
+end
+
+end
+
+out=t[16:1];
+end
+
+endmodule

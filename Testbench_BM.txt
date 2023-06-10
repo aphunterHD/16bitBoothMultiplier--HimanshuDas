@@ -1,0 +1,27 @@
+//Testbench implementation of 8 x 8 bits Multiplier using Booth Algorithm
+
+`timescale 1ns / 1ps
+
+module tb();
+
+reg [7:0] a,b;reg reset;wire [15:0] out;
+
+bm dut (reset,a,b,out);
+
+initial
+begin
+a=12;b=4;
+#2 reset=1; 
+#5 reset=0;
+#10 reset=1; a=8'h45;b=8'h34; //Two postive numbers
+#5 reset=0;
+#10 reset=1; a=8'h45;b=8'hb4; //a positive and b negative, result is negative decimal equivalent
+#5 reset=0;
+#10 reset=1; a=8'ha5;b=8'h34; //a negative and b positive, result is negative decimal equivalent
+#5 reset=0;
+#10 reset=1; a=8'hb5;b=8'hc4; //both a and b negative, result is positive decimal equivalent
+#5 reset=0;
+#10 $finish;
+end
+
+endmodule
